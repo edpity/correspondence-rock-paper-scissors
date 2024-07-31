@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <style>
+   html, body {
+    height: 100%;
+   }
+   .parent {
+     width: 100%;
+     height: 100%;
+     display: table;
+     text-align: center;
+   }
+   .parent > .child {
+     display: table-cell;
+     vertical-align: middle;
+   }
+   body {
+    background: radial-gradient(#737373 0%, #000000 100%);
+   }
+   p.a {
+    font: 48px Courier, sans-serif;
+   }
+   p.b {
+    font: 18px Courier, sans-serif;
+   }
+  </style>
+  <title>correspondence rock paper scissors</title> 
+ </head>
+ <body>
+  <section class="parent">
+   <div class="child">
+		<form action="{{ url_for('home')}}" method="post">
+		<label for="username">Username</label>
+		<input type="text" id="username" name="user" placeholder="username">
+		<label for="password">Password</label>
+		<input type="text" id="password" name="pass" placeholder="password">
+		<button type="submit">Login</button>
+		<a href="/register">Register</a>
+   </div>
+  </section>
+    </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <style>
+   html, body {
+    height: 100%;
+   }
+   .parent {
+     width: 100%;
+     height: 100%;
+     display: table;
+     text-align: center;
+   }
+   .parent > .child {
+     display: table-cell;
+     vertical-align: middle;
+   }
+   body {
+    background: radial-gradient(#737373 0%, #000000 100%);
+   }
+   p.a {
+    font: 48px Courier, sans-serif;
+   }
+   p.b {
+    font: 18px Courier, sans-serif;
+   }
+  </style>
+  <title>correspondence rock paper scissors</title> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+ </head>
+ <body>
+  <section class="parent">
+   <div class="child">
+    <button class="button" value="1" onclick="sendData()">Rock</button>
+    <button class="button" value="2" onclick="sendData()">Paper</button>
+    <button class="button" value="3" onclick="sendData()">Scissors</button>
+	<p id="output"></p>
+   </div>
+  </section>
+        <script>
+			function sendData() { 
+				const buttons = document.querySelectorAll(".button");
+				for (var i = 0; i < buttons.length; i++) {
+					buttons[i].addEventListener("click", function(e) {
+					value = e.target.value
+				
+					});	
+				}
+				$.ajax({ 
+					url: '/play', 
+					type: 'POST', 
+					data: { 'data': value }, 
+					success: function(response) { 
+						document.getElementById('output').innerHTML = response; 
+					}, 
+					error: function(error) { 
+						console.log(error); 
+					} 
+				}); 
+			} 
+        </script>
+    </body>
+</html>
