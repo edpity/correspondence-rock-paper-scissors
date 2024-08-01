@@ -1,22 +1,30 @@
 import os
 import pandas as pd
 import pickle
+from time import sleep
 from flask import Flask, render_template, request
+from werkzeug.serving import WSGIRequestHandler
 
 app = Flask(__name__,template_folder="templates")
 
 userframe = pd.read_csv('userframe.csv')
+
 statefile = 'picklestate.pk'
 with open(statefile, 'wb') as sfile:
     pickle.dump(0, sfile)
 
-choicefile = 'picklechoice.pk'
-with open(choicefile, 'wb') as cfile:
-    pickle.dump(1, cfile)
+pickfile = 'picklechoice.pk'
+with open(pickfile, 'wb') as pfile:
+    pickle.dump(1, pfile)
+
+counterfile = 'picklecounterchoice.pk'
+with open(counterfile, 'wb') as cfile:
+    pickle.dump(0, cfile)
 
 
 @app.route("/", methods=['POST','GET'])
 def home():
+
     if request.method == 'POST':
         if userframe['user'].isin([request.form['user']]).any():
             if request.form['pass'] == userframe[userframe['user'] == request.form['user']]['pass'].item():
@@ -30,6 +38,7 @@ def home():
 
 @app.route("/register", methods=['POST','GET'])
 def register():
+
     if request.method == 'POST':
         if userframe['user'].isin([request.form['user']]).any():
             return render_template('useralreadyexists.html')
@@ -42,24 +51,46 @@ def register():
     
 @app.route("/play", methods=['POST'])
 def play():
+    
+    global player
+    global pick
+    global counterpick
+    
     with open(statefile, 'rb') as sfile:
         state = pickle.load(sfile)
        
     if state == 0:
         pick = request.form.get('data')
+        counterpick = 0
         with open(statefile, 'wb') as sfile:
             pickle.dump(1, sfile)
-        with open(choicefile, 'wb') as cfile:
-            pickle.dump(pick, cfile)
-        return('')
-    
+        with open(pickfile, 'wb') as pfile:
+            pickle.dump(pick, pfile)
+        with open(counterfile, 'wb') as cfile:
+            pickle.dump(counterpick, cfile)
+        while counterpick == 0:
+            sleep(2)
+            with open(counterfile, 'rb') as cfile:
+                counterpick = pickle.load(cfile)
+        else:
+            player = 1
+            result = eval()
+            return(result)
+
     elif state == 1:
         counterpick = request.form.get('data')
         with open(statefile, 'wb') as sfile:
             pickle.dump(0, sfile)
-        with open(choicefile, 'rb') as cfile:
-            pick = pickle.load(cfile)
-     
+        with open(counterfile, 'wb') as cfile:
+            pickle.dump(counterpick, cfile)
+        with open(pickfile, 'rb') as pfile:
+            pick = pickle.load(pfile)
+        player = 2
+        result = eval()
+        return(result)
+
+def eval():
+
     if pick == '1':
         choice = 'rock'
     elif pick == '2':
@@ -72,7 +103,7 @@ def play():
     elif counterpick == '2':
         against = 'paper'
     elif counterpick == '3':
-        against = 'scissors'   
+        against = 'scissors'  
 
     if (choice == 'rock' and against == 'paper'):
         status = 0
@@ -95,14 +126,23 @@ def play():
     else:
         status = 0
 
-    if status == 2:
+    if (status == 2 and player == 2):
         return(choice.capitalize() + ' beats ' + against + '! You lose.')
-    elif status == 1:
+    elif (status == 1 and player == 2):
         return('Draw!')
-    else:
+    elif (status == 0 and player == 2):
         return(against.capitalize() + ' beats ' + choice + '! You win.')
+    elif (status == 2 and player == 1):
+        return(choice.capitalize() + ' beats ' + against + '! You win.')
+    elif (status == 1 and player == 1):
+        return('Draw!')
+    elif (status == 0 and player == 1):
+        return(against.capitalize() + ' beats ' + choice + '! You lose.')
+    else:
+        return('Error')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
+    WSGIRequestHandler.protocol_version = "HTTP/1.1"
     app.run(host='127.0.0.1', port=port, debug=True)
 
