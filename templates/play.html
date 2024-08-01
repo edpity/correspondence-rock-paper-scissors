@@ -31,21 +31,15 @@
  <body>
   <section class="parent">
    <div class="child">
-    <button class="button" value="1" onclick="sendData()">Rock</button>
-    <button class="button" value="2" onclick="sendData()">Paper</button>
-    <button class="button" value="3" onclick="sendData()">Scissors</button>
+    <button class="button" value="1" onclick="sendData(event)">Rock</button>
+    <button class="button" value="2" onclick="sendData(event)">Paper</button>
+    <button class="button" value="3" onclick="sendData(event)">Scissors</button>
 	<p id="output"></p>
    </div>
   </section>
-        <script>
-			function sendData() { 
-				const buttons = document.querySelectorAll(".button");
-				for (var i = 0; i < buttons.length; i++) {
-					buttons[i].addEventListener("click", function(e) {
-					value = e.target.value
-				
-					});	
-				}
+  <script>
+			function sendData(e) { 
+				var value = e.target.value
 				$.ajax({ 
 					url: '/play', 
 					type: 'POST', 
@@ -58,6 +52,6 @@
 					} 
 				}); 
 			} 
-        </script>
+      </script>
     </body>
 </html>
