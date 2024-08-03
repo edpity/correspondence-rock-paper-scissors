@@ -16,7 +16,7 @@
      vertical-align: middle;
    }
    body {
-    background: radial-gradient(#737373 0%, #000000 100%);
+    background: radial-gradient(#ff99cc 0%, #000000 100%);
    }
    p.a {
     font: 48px Courier, sans-serif;
@@ -29,13 +29,13 @@
  </head>
  <body>
   <section class="parent">
-   <div class="child">
+   <div class="child"><marquee><p style="color:violet;font-size:300%" >do not use 'standard' passswords; passwords are stored in plaintext</p>
 		<form action="{{ url_for('register')}}" method="post">
 		<label for="username">Username</label>
 		<input type="text" id="username" name="user" placeholder="username">
 		<label for="password">Password</label>
 		<input type="text" id="password" name="pass" placeholder="password">
-		<button type="submit">Register</button>
+		<button type="submit">Register</button></marquee>
    </div>
   </section>
     </body>

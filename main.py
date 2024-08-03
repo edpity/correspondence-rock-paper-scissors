@@ -43,9 +43,14 @@ def register():
         if userframe['user'].isin([request.form['user']]).any():
             return render_template('useralreadyexists.html')
         else:
-            userframe.loc[len(userframe)] = [request.form['user'], request.form['pass']]
-            userframe.to_csv('userframe.csv', index=True)
-            return render_template('login.html')
+            if request.form['user'] == '':
+                return render_template('usernamecannotbeblank.html')
+            elif request.form['pass'] == '':
+                return render_template('passwordcannotbeblank.html')
+            else:
+                userframe.loc[len(userframe)] = [request.form['user'], request.form['pass']]
+                userframe.to_csv('userframe.csv', index=False)
+                return render_template('login.html')
     else:
         return render_template('register.html')
     
@@ -142,7 +147,7 @@ def eval():
         return('Error')
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 5001))
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
-    app.run(host='127.0.0.1', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
 

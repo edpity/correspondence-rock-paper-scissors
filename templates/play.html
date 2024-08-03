@@ -16,7 +16,7 @@
      vertical-align: middle;
    }
    body {
-    background: radial-gradient(#737373 0%, #000000 100%);
+    background: radial-gradient(#ff99cc 0%, #000000 100%);
    }
    p.a {
     font: 48px Courier, sans-serif;
@@ -24,6 +24,19 @@
    p.b {
     font: 18px Courier, sans-serif;
    }
+   .emptycircle {
+	  border-radius: 50%;
+	  height: 20px;
+	  width: 20px;
+	  border: 2px solid red;
+	}
+   .fullcircle {
+	  border-radius: 50%;
+	  height: 20px;
+	  width: 20px;
+	  border: 2px solid red;
+	  background-color: #f00;
+	}		
   </style>
   <title>correspondence rock paper scissors</title> 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
@@ -31,6 +44,7 @@
  <body>
   <section class="parent">
    <div class="child">
+   <p class="emptycircle"></p>
     <button class="button" value="1" onclick="sendData(event)">Rock</button>
     <button class="button" value="2" onclick="sendData(event)">Paper</button>
     <button class="button" value="3" onclick="sendData(event)">Scissors</button>
