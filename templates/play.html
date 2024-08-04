@@ -41,7 +41,7 @@
 	}		
   </style>
   <title>correspondence rock paper scissors</title> 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
  </head>
  <body>
   <section class="parent">
@@ -76,15 +76,21 @@
             url: '/state',
             type: 'GET',
             success: function(data) {
-              console.log(data);
+              setState(data);
             }
           });
-          if (getState == 0) {
-            var state = '.emptycircle';
-          } else {
-            state = '.fullcircle';
+        }
+
+        function setState(full) {
+          if (full == 1) {
+          $("#state")[0].className=full?'fullcircle':'emptycircle';
+          }
+          else {
+            $("#state")[0].className=full?'emptycircle':'emptycircle';
           }
         }
+
+        setInterval(getState, 5000);
       </script>
     </body>
 </html>
