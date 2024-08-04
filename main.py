@@ -3,9 +3,15 @@ import pandas as pd
 import pickle
 from time import sleep
 from flask import Flask, render_template, request
+#from flask_socketio import SocketIO, send, emit
 from werkzeug.serving import WSGIRequestHandler
 
 app = Flask(__name__,template_folder="templates")
+#app.config['SECRET_KEY'] = 'rock'
+#app.config['host'] = '0.0.0.0'
+#app.config['port'] = int(os.environ.get('PORT', 5001))
+#app.config['debug'] = True
+#socketio = SocketIO(app)
 
 userframe = pd.read_csv('userframe.csv')
 
@@ -131,6 +137,7 @@ def eval():
     else:
         status = 0
 
+
     if (status == 2 and player == 2):
         return(choice.capitalize() + ' beats ' + against + '! You lose.')
     elif (status == 1 and player == 2):
@@ -146,8 +153,15 @@ def eval():
     else:
         return('Error')
 
+@app.route("/state", methods=['GET'])    
+def turn():
+    with open(statefile, 'rb') as sfile:
+        state = pickle.load(sfile)
+    return(str(state))
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
+    #socketio.run(app)
     app.run(host='0.0.0.0', port=port, debug=True)
 

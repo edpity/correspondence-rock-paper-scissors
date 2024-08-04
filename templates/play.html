@@ -25,13 +25,15 @@
     font: 18px Courier, sans-serif;
    }
    .emptycircle {
-	  border-radius: 50%;
+	  margin: auto;
+    border-radius: 50%;
 	  height: 20px;
 	  width: 20px;
 	  border: 2px solid red;
 	}
    .fullcircle {
-	  border-radius: 50%;
+	  margin: auto;
+    border-radius: 50%;
 	  height: 20px;
 	  width: 20px;
 	  border: 2px solid red;
@@ -44,7 +46,8 @@
  <body>
   <section class="parent">
    <div class="child">
-   <p class="emptycircle"></p>
+   <p id="state" class="emptycircle"></p>
+   <br>
     <button class="button" value="1" onclick="sendData(event)">Rock</button>
     <button class="button" value="2" onclick="sendData(event)">Paper</button>
     <button class="button" value="3" onclick="sendData(event)">Scissors</button>
@@ -65,7 +68,23 @@
 						console.log(error); 
 					} 
 				}); 
-			} 
+			}
+      </script>
+      <script>
+        function getState() {
+          $.ajax({
+            url: '/state',
+            type: 'GET',
+            success: function(data) {
+              console.log(data);
+            }
+          });
+          if (getState == 0) {
+            var state = '.emptycircle';
+          } else {
+            state = '.fullcircle';
+          }
+        }
       </script>
     </body>
 </html>
