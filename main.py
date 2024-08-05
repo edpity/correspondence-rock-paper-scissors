@@ -3,6 +3,7 @@ import pandas as pd
 import pickle
 from time import sleep
 from flask import Flask, render_template, request
+from waitress import serve
 #from flask_socketio import SocketIO, send, emit
 from werkzeug.serving import WSGIRequestHandler
 
@@ -160,8 +161,9 @@ def turn():
     return(str(state))
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5001))
+    #port = int(os.environ.get('PORT', 6969))
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
     #socketio.run(app)
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app = app.run(host='10.0.0.1', port=port, debug=True)
+    serve(app, host='0.0.0.0', port=6969)
 

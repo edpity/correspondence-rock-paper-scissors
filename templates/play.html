@@ -46,7 +46,7 @@
  <body>
   <section class="parent">
    <div class="child">
-   <p id="state" class="emptycircle"></p>
+   <p id="state" class="circle"></p>
    <br>
     <button class="button" value="1" onclick="sendData(event)">Rock</button>
     <button class="button" value="2" onclick="sendData(event)">Paper</button>
@@ -83,10 +83,10 @@
 
         function setState(full) {
           if (full == 1) {
-          $("#state")[0].className=full?'fullcircle':'emptycircle';
+          $("#state")[0].className=full?'fullcircle':'circle';
           }
           else {
-            $("#state")[0].className=full?'emptycircle':'emptycircle';
+            $("#state")[0].className=full?'emptycircle':'circle';
           }
         }
 
