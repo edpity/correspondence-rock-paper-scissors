@@ -24,14 +24,14 @@
    p.b {
     font: 18px Courier, sans-serif;
    }
-   .emptycircle {
+   .emptyCircle {
 	  margin: auto;
     border-radius: 50%;
 	  height: 20px;
 	  width: 20px;
 	  border: 2px solid red;
 	}
-   .fullcircle {
+   .fullCircle {
 	  margin: auto;
     border-radius: 50%;
 	  height: 20px;
@@ -56,25 +56,28 @@
   </section>
   <script>
 			function sendData(e) { 
-				var value = e.target.value
+				var value = e.target.value;
+        var fullness = document.getElementById('state');
+        var keepTrack = 0;
 				$.ajax({ 
 					url: '/play', 
 					type: 'POST', 
 					data: { 'data': value }, 
 					success: function(response) { 
 						document.getElementById('output').innerHTML = response;
+            $("#state")[0].className=fullness?'emptyCircle':'circle';
+            console.log('reset');
+            keepTrack = 1; 
 					}, 
 					error: function(error) { 
 						console.log(error); 
 					} 
 				});
-        var fullness = document.getElementById('state');
-        if (fullness.className == 'fullcircle') {
-          $("#state")[0].className=fullness?'emptycircle':'circle';
+        if (fullness.className == 'emptyCircle') {
+          $("#state")[0].className=fullness?'fullCircle':'circle';
+          console.log('fill');
+          keepTrack = 1;
         }
-        else {
-          $("#state")[0].className=fullness?'fullcircle':'circle';
-        } 
 			}
       </script>
       <script>
@@ -90,10 +93,10 @@
 
         function setState(full) {
           if (full == 1) {
-            $("#state")[0].className=full?'fullcircle':'circle';
+            $("#state")[0].className=full?'fullCircle':'circle';
           }
           else {
-            $("#state")[0].className=full?'emptycircle':'circle';
+            $("#state")[0].className=full?'emptyCircle':'circle';
           }
         }
 
