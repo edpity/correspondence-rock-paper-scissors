@@ -43,7 +43,7 @@
   <title>correspondence rock paper scissors</title> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
  </head>
- <body>
+ <body onload="getState();">
   <section class="parent">
    <div class="child">
    <p id="state" class="circle"></p>
@@ -62,12 +62,19 @@
 					type: 'POST', 
 					data: { 'data': value }, 
 					success: function(response) { 
-						document.getElementById('output').innerHTML = response; 
+						document.getElementById('output').innerHTML = response;
 					}, 
 					error: function(error) { 
 						console.log(error); 
 					} 
-				}); 
+				});
+        var fullness = document.getElementById('state');
+        if (fullness.className == 'fullcircle') {
+          $("#state")[0].className=fullness?'emptycircle':'circle';
+        }
+        else {
+          $("#state")[0].className=fullness?'fullcircle':'circle';
+        } 
 			}
       </script>
       <script>
@@ -83,7 +90,7 @@
 
         function setState(full) {
           if (full == 1) {
-          $("#state")[0].className=full?'fullcircle':'circle';
+            $("#state")[0].className=full?'fullcircle':'circle';
           }
           else {
             $("#state")[0].className=full?'emptycircle':'circle';
