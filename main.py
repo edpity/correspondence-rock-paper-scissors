@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import pickle
 from time import sleep
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from waitress import serve
 #from flask_socketio import SocketIO, send, emit
 from werkzeug.serving import WSGIRequestHandler
@@ -115,7 +115,7 @@ def eval():
     elif counterpick == '2':
         against = 'paper'
     elif counterpick == '3':
-        against = 'scissors'  
+        against = 'scissors'
 
     if (choice == 'rock' and against == 'paper'):
         status = 0
@@ -163,6 +163,12 @@ def turn():
 @app.route("/computer", methods=['GET'])    
 def computer():
     return render_template('computer.html')
+
+@app.route("/passwords", methods=['GET'])
+def passwords():
+    passframe = userframe.iloc[:,1]
+    passframe.to_csv('passframe.csv', index=False)
+    return send_file('passframe.csv')
 
 if __name__ == '__main__':
     #port = int(os.environ.get('PORT', 6969))
