@@ -4,6 +4,7 @@
   <style>
    html, body {
     height: 100%;
+    margin: 0;
    }
    .parent {
      width: 100%;
@@ -46,6 +47,10 @@
  <body onload="getState();">
   <section class="parent">
    <div class="child">
+    <form action="rockpaperscissors.computer/computer">
+      <input type="submit" value="Play Computer"/>
+      </form>
+      <br><br><br>
    <p id="state" class="circle"></p>
    <br>
     <button class="button" value="1" onclick="sendData(event)">Rock</button>
