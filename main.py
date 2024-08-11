@@ -160,6 +160,10 @@ def turn():
         state = pickle.load(sfile)
     return(str(state))
 
+@app.route("/computer", methods=['GET'])    
+def computer():
+    return render_template('computer.html')
+
 if __name__ == '__main__':
     #port = int(os.environ.get('PORT', 6969))
     WSGIRequestHandler.protocol_version = "HTTP/1.1"
