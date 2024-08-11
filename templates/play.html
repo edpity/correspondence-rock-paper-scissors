@@ -58,7 +58,6 @@
 			function sendData(e) { 
 				var value = e.target.value;
         var fullness = document.getElementById('state');
-        var keepTrack = 0;
 				$.ajax({ 
 					url: '/play', 
 					type: 'POST', 
@@ -66,8 +65,6 @@
 					success: function(response) { 
 						document.getElementById('output').innerHTML = response;
             $("#state")[0].className=fullness?'emptyCircle':'circle';
-            console.log('reset');
-            keepTrack = 1; 
 					}, 
 					error: function(error) { 
 						console.log(error); 
@@ -75,8 +72,6 @@
 				});
         if (fullness.className == 'emptyCircle') {
           $("#state")[0].className=fullness?'fullCircle':'circle';
-          console.log('fill');
-          keepTrack = 1;
         }
 			}
       </script>
