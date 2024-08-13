@@ -25,13 +25,13 @@
  <body>
   <section class="parent">
    <div class="child">
-		<form action="{{ url_for('home')}}" method="post">
+		<form action="{{ url_for('login')}}" method="post">
 		<label for="username">Username</label>
 		<input type="text" id="username" name="user" placeholder="username">
 		<label for="password">Password</label>
 		<input type="text" id="password" name="pass" placeholder="password">
-		<button type="submit">Login</button>
-		<a href="/register">Register</a>
+		<button type="submit" name="action" value="login">Login</button></form>
+		<form action="" method="post"><button type="submit" name="action" value="rego">Register</button></form>
    </div>
   </section>
     </body>

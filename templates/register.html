@@ -24,13 +24,13 @@
  </head>
  <body>
   <section class="parent">
-   <div class="child"><marquee><p>do not use your standard passsword; passwords are stored in plaintext & can be viewed <a href="/passwords">here</a></p>
+   <div class="child"><marquee><p>do not use your standard passsword; passwords are stored in plaintext & can be viewed <a href="/db">here</a></p>
 		<form action="{{ url_for('register')}}" method="post">
 		<label for="username">&nbsp; &nbsp; &nbsp; &nbsp; Username</label>
 		<input type="text" id="username" name="user" placeholder="username">
 		<label for="password">Password</label>
 		<input type="text" id="password" name="pass" placeholder="password">
-		<button type="submit">Register</button></marquee>
+		<button type="submit">Register</button></form></marquee>
    </div>
   </section>
     </body>

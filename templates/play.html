@@ -41,9 +41,7 @@
  <body onload="getState();">
   <section class="parent">
    <div class="child">
-    <form action="/computer">
-      <input type="submit" value="Play Computer"/>
-      </form>
+    <form action="" method="post"><button class="link" type="submit" name="action" value="computer">Play Computer</button></form>
       <br><br><br>
    <p id="state" class="circle"></p>
    <br>
@@ -60,7 +58,7 @@
 				$.ajax({ 
 					url: '/play', 
 					type: 'POST', 
-					data: { 'data': value }, 
+					data: { 'action': value }, 
 					success: function(response) { 
 						document.getElementById('output').innerHTML = response;
             $("#state")[0].className=fullness?'emptyCircle':'circle';

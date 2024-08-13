@@ -2,12 +2,12 @@ import os
 import pandas as pd
 import pickle
 from time import sleep
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect
 from waitress import serve
 #from flask_socketio import SocketIO, send, emit
 from werkzeug.serving import WSGIRequestHandler
 
-app = Flask(__name__,template_folder="templates")
+app = Flask(__name__,template_folder='templates')
 #app.config['SECRET_KEY'] = 'rock'
 #app.config['host'] = '0.0.0.0'
 #app.config['port'] = int(os.environ.get('PORT', 5001))
@@ -29,23 +29,28 @@ with open(counterfile, 'wb') as cfile:
     pickle.dump(0, cfile)
 
 
-@app.route("/", methods=['POST','GET'])
+@app.route('/', methods=['GET'])
 def home():
-
+        return redirect('/login')
+    
+@app.route('/login', methods=['POST','GET'])
+def login():
     if request.method == 'POST':
-        if userframe['user'].isin([request.form['user']]).any():
-            if request.form['pass'] == userframe[userframe['user'] == request.form['user']]['pass'].item():
-                return render_template('play.html')
-            else:
-                return render_template('wrongpassword.html')
+        if request.form['action'] == 'rego':
+            return redirect('/register')
         else:
-            return render_template('usernotfound.html')
+            if userframe['user'].isin([request.form['user']]).any():
+                if request.form['pass'] == userframe[userframe['user'] == request.form['user']]['pass'].item():
+                    return redirect('/play')
+                else:
+                    return render_template('wrongpassword.html')
+            else:
+                return render_template('usernotfound.html')
     else:
         return render_template('login.html')
 
-@app.route("/register", methods=['POST','GET'])
+@app.route('/register', methods=['POST','GET'])
 def register():
-
     if request.method == 'POST':
         if userframe['user'].isin([request.form['user']]).any():
             return render_template('useralreadyexists.html')
@@ -57,49 +62,57 @@ def register():
             else:
                 userframe.loc[len(userframe)] = [request.form['user'], request.form['pass']]
                 userframe.to_csv('userframe.csv', index=False)
-                return render_template('login.html')
+                return redirect('/login')
     else:
         return render_template('register.html')
     
-@app.route("/play", methods=['POST'])
+@app.route('/play', methods=['POST','GET'])
 def play():
     
     global player
     global pick
     global counterpick
-    
+            
     with open(statefile, 'rb') as sfile:
         state = pickle.load(sfile)
-       
-    if state == 0:
-        pick = request.form.get('data')
-        counterpick = 0
-        with open(statefile, 'wb') as sfile:
-            pickle.dump(1, sfile)
-        with open(pickfile, 'wb') as pfile:
-            pickle.dump(pick, pfile)
-        with open(counterfile, 'wb') as cfile:
-            pickle.dump(counterpick, cfile)
-        while counterpick == 0:
-            sleep(2)
-            with open(counterfile, 'rb') as cfile:
-                counterpick = pickle.load(cfile)
+    
+    if request.method == 'GET':
+        return render_template('play.html')
+    
+    elif request.method == 'POST':
+        if request.form['action'] == 'computer':
+            return redirect('/computer')
+        
         else:
-            player = 1
-            result = eval()
-            return(result)
+            if state == 0:
+                pick = request.form.get('action')
+                counterpick = 0
+                with open(statefile, 'wb') as sfile:
+                    pickle.dump(1, sfile)
+                with open(pickfile, 'wb') as pfile:
+                    pickle.dump(pick, pfile)
+                with open(counterfile, 'wb') as cfile:
+                    pickle.dump(counterpick, cfile)
+                while counterpick == 0:
+                    sleep(2)
+                    with open(counterfile, 'rb') as cfile:
+                        counterpick = pickle.load(cfile)
+                else:
+                    player = 1
+                    result = eval()
+                    return(result)
 
-    elif state == 1:
-        counterpick = request.form.get('data')
-        with open(statefile, 'wb') as sfile:
-            pickle.dump(0, sfile)
-        with open(counterfile, 'wb') as cfile:
-            pickle.dump(counterpick, cfile)
-        with open(pickfile, 'rb') as pfile:
-            pick = pickle.load(pfile)
-        player = 2
-        result = eval()
-        return(result)
+            elif state == 1:
+                counterpick = request.form.get('action')
+                with open(statefile, 'wb') as sfile:
+                    pickle.dump(0, sfile)
+                with open(counterfile, 'wb') as cfile:
+                    pickle.dump(counterpick, cfile)
+                with open(pickfile, 'rb') as pfile:
+                    pick = pickle.load(pfile)
+                player = 2
+                result = eval()
+                return(result)
 
 def eval():
 
@@ -138,7 +151,6 @@ def eval():
     else:
         status = 0
 
-
     if (status == 2 and player == 2):
         return(choice.capitalize() + ' beats ' + against + '! You lose.')
     elif (status == 1 and player == 2):
@@ -154,25 +166,23 @@ def eval():
     else:
         return('Error')
 
-@app.route("/state", methods=['GET'])    
+@app.route('/state', methods=['GET'])    
 def turn():
     with open(statefile, 'rb') as sfile:
         state = pickle.load(sfile)
     return(str(state))
 
-@app.route("/computer", methods=['GET'])    
+@app.route('/computer', methods=['GET'])    
 def computer():
     return render_template('computer.html')
 
-@app.route("/passwords", methods=['GET'])
-def passwords():
-    passframe = userframe.iloc[:,1]
-    passframe.to_csv('passframe.csv', index=False)
-    return send_file('passframe.csv')
+@app.route('/db', methods=['GET'])
+def db():
+    return send_file('userframe.csv')
 
 if __name__ == '__main__':
     #port = int(os.environ.get('PORT', 6969))
-    WSGIRequestHandler.protocol_version = "HTTP/1.1"
+    WSGIRequestHandler.protocol_version = 'HTTP/1.1'
     #socketio.run(app)
     #app = app.run(host='10.0.0.1', port=port, debug=True)
     serve(app, host='0.0.0.0', port=6969)
